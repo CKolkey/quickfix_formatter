@@ -30,6 +30,8 @@ RSpec.configure do |config|
 end
 ```
 
+Once `rspec` has written the output file, you can load it with `:cfile <path to file>`.
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/ckolkey/quickfix_formatter.
