@@ -1,9 +1,26 @@
 # frozen_string_literal: true
 
-require_relative "quickfix_formatter/version"
+require "rspec/core"
 require "rspec/core/formatters/base_formatter"
 
-module QuickfixFormatter
+::RSpec.configuration.add_setting :quickfix_output_file, default: "tmp/quickfix.out"
+::RSpec.configuration.add_setting :quickfix_silence,     default: false
+
+# Writes the failures in a format consumable by the vim quickfix list
+class QuickfixFormatter < RSpec::Core::Formatters::BaseFormatter
+  ::RSpec::Core::Formatters.register self, :dump_failures
+
+  def dump_failures(notification)
+    File.write(
+      config.quickfix_output_file,
+      notification.failed_examples.map(&method(:line_output)).join
+    )
+
+    puts(text_output) unless config.quickfix_silence
+  end
+
+  private
+
   def line_output(example)
     filepath          = example.metadata[:absolute_file_path]
     line_number       = example.metadata[:line_number]
@@ -12,13 +29,11 @@ module QuickfixFormatter
     "#{filepath}:#{line_number}: #{group_description}: #{example.description}\n"
   end
 
-  class Formatter < RSpec::Core::Formatters::BaseFormatter
-    def dump_failures(notification)
-      notification.failed_examples.each do |example|
-        output.puts line_output(example)
-      end
-    end
+  def text_output
+    ::RSpec::Core::Formatters::ConsoleCodes.wrap("\nQuickfix written to: '#{config.quickfix_output_file}'", :blue)
   end
 
-  RSpec::Core::Formatters.register QuickfixFormatter::Formatter, :dump_failures
+  def config
+    ::RSpec.configuration
+  end
 end
