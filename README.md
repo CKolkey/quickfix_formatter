@@ -1,34 +1,38 @@
 # QuickfixFormatter
 
-TODO: Delete this and the text below, and describe your gem
-
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/quickfix_formatter`. To experiment with that code, run `bin/console` for an interactive prompt.
+Easily integrate the vim quickfix list with your failing rspec tests. Just add this gem, set it as one of your
+formatters (`--format QuickfixFormatter`)
 
 ## Installation
 
-TODO: Replace `UPDATE_WITH_YOUR_GEM_NAME_PRIOR_TO_RELEASE_TO_RUBYGEMS_ORG` with your gem name right after releasing it to RubyGems.org. Please do not do it earlier due to security reasons. Alternatively, replace this section with instructions to install your gem from git if you don't plan to release to RubyGems.org.
-
 Install the gem and add to the application's Gemfile by executing:
 
-    $ bundle add UPDATE_WITH_YOUR_GEM_NAME_PRIOR_TO_RELEASE_TO_RUBYGEMS_ORG
+    $ bundle add quickfix_formatter
 
 If bundler is not being used to manage dependencies, install the gem by executing:
 
-    $ gem install UPDATE_WITH_YOUR_GEM_NAME_PRIOR_TO_RELEASE_TO_RUBYGEMS_ORG
+    $ gem install quickfix_formatter
 
 ## Usage
 
-TODO: Write usage instructions here
+Add `--format QuickfixFormatter` to `.rspec` or in the command line. There are two configurable settings, shown below
+with their default values.
 
-## Development
+`quickfix_output_file` is a string that represents the location the quickfix file is written to.
+`quickfix_silence`, when set to `true`, will supress the text that prints after writing the file.
 
-After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+```ruby
+# spec/spec_helper.rb
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+RSpec.configure do |config|
+  config.quickfix_output_file = "tmp/quickfix.out"
+  config.quickfix_silence     = false
+end
+```
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/quickfix_formatter.
+Bug reports and pull requests are welcome on GitHub at https://github.com/ckolkey/quickfix_formatter.
 
 ## License
 
